@@ -7,11 +7,11 @@
     ansible.builtin.file:
       path: "{{ item }}"
       state: directory
-      loop:
-        - /opt/prometheus
-        - /etc/prometheus
-        - /var/lib/prometheus
-        - /opt/node_exporter 
+    loop:
+      - /opt/prometheus
+      - /etc/prometheus
+      - /var/lib/prometheus
+      - /opt/node_exporter
   - name: Download node exporter package
     ansible.builtin.get_url:
       url: https://github.com/prometheus/node_exporter/releases/download/v1.11.1/node_exporter-1.11.1.linux-amd64.tar.gz
@@ -48,10 +48,10 @@
       recurse: yes
       owner: prometheus
       group: prometheus
-      loop:
-        - /opt/prometheus
-        - /etc/prometheus
-        - /var/lib/prometheus
+    loop:
+      - /opt/prometheus
+      - /etc/prometheus
+      - /var/lib/prometheus
   - name: Copy file with owner and permissions
     ansible.builtin.copy:
       src: ./prometheus.service
