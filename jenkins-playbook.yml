@@ -8,7 +8,7 @@
       dest: /etc/yum.repos.d/jenkins.repo
   - name: Install java-21 and fontconfig packages
     ansible.builtin.dnf:
-      name: {{ item }}
+      name: "{{ item }}"
       state: present
     loop:
       - java-21-openjdk
