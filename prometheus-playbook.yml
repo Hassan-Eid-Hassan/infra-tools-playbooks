@@ -1,0 +1,62 @@
+---
+- name: install promethues and node exporter
+  hosts: promethues
+  tasks:
+  - name: Create promthues directory
+    ansible.builtin.file:
+      path: {{ item }}
+      state: directory
+      loop:
+        - /opt/prometheus
+        - /etc/prometheus
+        - /var/lib/prometheus
+        - /opt/node_exporter 
+  - name: Download node exporter package
+    ansible.builtin.get_url:
+      url: https://github.com/prometheus/node_exporter/releases/download/v1.11.1/node_exporter-1.11.1.linux-amd64.tar.gz
+      dest: /opt/node_exporter/node_exporter-v1.11.1.tar.gz
+  - name: Extract node_exporter-v1.11.1.tar.gz into /opt/node_exporter
+    ansible.builtin.unarchive:
+      src: /opt/node_exporter/node_exporter-v1.11.1.tar.gz
+      dest: /opt/node_exporter/node_exporter-v1.11.1
+  - name: Copy file with owner and permissions
+    ansible.builtin.copy:
+      src: ./node-exporter.service
+      dest: /etc/systemd/system/node-exporter.service
+  - name: Enable and start node exporter service
+    ansible.builtin.systemd_service:
+      name: node-exporter
+      state: started
+      enabled: true
+  - name: Download promethues package
+    ansible.builtin.get_url:
+      url: https://github.com/prometheus/prometheus/releases/download/v3.11.3/prometheus-3.11.3.linux-amd64.tar.gz
+      dest: /opt/prometheus/prometheus-v3.11.3.tar.gz
+  - name: Extract prometheus-v3.11.3.tar.gz into /opt/prometheus
+    ansible.builtin.unarchive:
+      src: /opt/prometheus/prometheus-v3.11.3.tar.gz
+      dest: /opt/prometheus/prometheus-v3.11.3
+  - name: Add prometheus user
+    ansible.builtin.user:
+      name: prometheus
+      shell: /bin/false
+  - name: Recursively change ownership of a directory
+    ansible.builtin.file:
+      path: {{ item }}
+      state: directory
+      recurse: yes
+      owner: prometheus
+      group: prometheus
+      loop:
+        - /opt/prometheus
+        - /etc/prometheus
+        - /var/lib/prometheus
+  - name: Copy file with owner and permissions
+    ansible.builtin.copy:
+      src: ./prometheus.service
+      dest: /etc/systemd/system/prometheus.service
+  - name: Enable and start prometheus service
+    ansible.builtin.systemd_service:
+      name: prometheus
+      state: started
+      enabled: true
