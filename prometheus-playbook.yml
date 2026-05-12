@@ -19,7 +19,7 @@
   - name: Extract node_exporter-v1.11.1.tar.gz into /opt/node_exporter
     ansible.builtin.unarchive:
       src: /opt/node_exporter/node_exporter-v1.11.1.tar.gz
-      dest: /opt/node_exporter/node_exporter-v1.11.1
+      dest: /opt/node_exporter
   - name: Copy file with owner and permissions
     ansible.builtin.copy:
       src: ./node-exporter.service
@@ -36,7 +36,7 @@
   - name: Extract prometheus-v3.11.3.tar.gz into /opt/prometheus
     ansible.builtin.unarchive:
       src: /opt/prometheus/prometheus-v3.11.3.tar.gz
-      dest: /opt/prometheus/prometheus-v3.11.3
+      dest: /opt/prometheus
   - name: Add prometheus user
     ansible.builtin.user:
       name: prometheus
