@@ -1,6 +1,7 @@
 ---
 - name: install promethues and node exporter
-  hosts: promethues
+  hosts: localhost
+  connection: local
   tasks:
   - name: Create promthues directory
     ansible.builtin.file:
