@@ -5,7 +5,7 @@
   tasks:
   - name: Create promthues directory
     ansible.builtin.file:
-      path: {{ item }}
+      path: "{{ item }}"
       state: directory
       loop:
         - /opt/prometheus
@@ -43,7 +43,7 @@
       shell: /bin/false
   - name: Recursively change ownership of a directory
     ansible.builtin.file:
-      path: {{ item }}
+      path: "{{ item }}"
       state: directory
       recurse: yes
       owner: prometheus
